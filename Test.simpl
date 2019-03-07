@@ -1,0 +1,38 @@
+[1 of 1] Compiling Test             ( Test.hs, Test.o )
+
+==================== Tidy Core ====================
+Result size of Tidy Core
+  = {terms: 18, types: 12, coercions: 0, joins: 0/0}
+
+-- RHS size: {terms: 3, types: 3, coercions: 0, joins: 0/0}
+foo :: forall p. p -> p
+[GblId, Arity=1, Caf=NoCafRefs]
+foo = \ (@ p_as3) (x_arY :: p_as3) -> x_arY
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$trModule1_rWJ :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs]
+$trModule1_rWJ = "main"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$trModule2_rWU :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs]
+$trModule2_rWU = GHC.Types.TrNameS $trModule1_rWJ
+
+-- RHS size: {terms: 1, types: 0, coercions: 0, joins: 0/0}
+$trModule3_rWV :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs]
+$trModule3_rWV = "Test"#
+
+-- RHS size: {terms: 2, types: 0, coercions: 0, joins: 0/0}
+$trModule4_rWW :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs]
+$trModule4_rWW = GHC.Types.TrNameS $trModule3_rWV
+
+-- RHS size: {terms: 3, types: 0, coercions: 0, joins: 0/0}
+Test.$trModule :: GHC.Types.Module
+[GblId, Caf=NoCafRefs]
+Test.$trModule = GHC.Types.Module $trModule2_rWU $trModule4_rWW
+
+
+

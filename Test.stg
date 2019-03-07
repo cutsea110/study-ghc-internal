@@ -1,0 +1,55 @@
+[1 of 1] Compiling Test             ( Test.hs, Test.o )
+
+==================== Pre unarise: ====================
+Test.foo :: forall p. p -> p
+[GblId, Arity=1, Caf=NoCafRefs, Unf=OtherCon []] =
+    [] \r [x_s17l] x_s17l;
+
+$trModule1_rWJ :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []] =
+    "main"#;
+
+$trModule2_rWU :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []] =
+    CCS_DONT_CARE GHC.Types.TrNameS! [$trModule1_rWJ];
+
+$trModule3_rWV :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []] =
+    "Test"#;
+
+$trModule4_rWW :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []] =
+    CCS_DONT_CARE GHC.Types.TrNameS! [$trModule3_rWV];
+
+Test.$trModule :: GHC.Types.Module
+[GblId, Caf=NoCafRefs, Unf=OtherCon []] =
+    CCS_DONT_CARE GHC.Types.Module! [$trModule2_rWU $trModule4_rWW];
+
+
+
+==================== STG syntax: ====================
+Test.foo :: forall p. p -> p
+[GblId, Arity=1, Caf=NoCafRefs, Unf=OtherCon []] =
+    [] \r [x_s17l] x_s17l;
+
+$trModule1_rWJ :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []] =
+    "main"#;
+
+$trModule2_rWU :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []] =
+    CCS_DONT_CARE GHC.Types.TrNameS! [$trModule1_rWJ];
+
+$trModule3_rWV :: GHC.Prim.Addr#
+[GblId, Caf=NoCafRefs, Unf=OtherCon []] =
+    "Test"#;
+
+$trModule4_rWW :: GHC.Types.TrName
+[GblId, Caf=NoCafRefs, Unf=OtherCon []] =
+    CCS_DONT_CARE GHC.Types.TrNameS! [$trModule3_rWV];
+
+Test.$trModule :: GHC.Types.Module
+[GblId, Caf=NoCafRefs, Unf=OtherCon []] =
+    CCS_DONT_CARE GHC.Types.Module! [$trModule2_rWU $trModule4_rWW];
+
+

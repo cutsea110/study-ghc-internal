@@ -1,0 +1,80 @@
+[1 of 1] Compiling Test             ( Test.hs, Test.o )
+
+==================== Output Cmm ====================
+[]
+
+
+
+==================== Output Cmm ====================
+[section ""data" . Test.foo_closure" {
+     Test.foo_closure:
+         const Test.foo_info;
+ },
+ Test.foo_entry() //  [R2]
+         { info_tbl: [(c17q,
+                       label: Test.foo_info
+                       rep:HeapRep static { Fun {arity: 1 fun_type: ArgSpec 5} })]
+           stack_info: arg_space: 8 updfr_space: Just 8
+         }
+     {offset
+       c17q: // global
+           _s17l::P64 = R2;
+           goto c17s;
+       c17s: // global
+           R1 = _s17l::P64;
+           call stg_ap_0_fast(R1) args: 8, res: 0, upd: 8;
+     }
+ }]
+
+
+
+==================== Output Cmm ====================
+[section ""cstring" . $trModule1_rWJ_bytes" {
+     $trModule1_rWJ_bytes:
+         I8[] [109,97,105,110]
+ }]
+
+
+
+==================== Output Cmm ====================
+[section ""data" . $trModule2_rWU_closure" {
+     $trModule2_rWU_closure:
+         const GHC.Types.TrNameS_con_info;
+         const $trModule1_rWJ_bytes;
+ }]
+
+
+
+==================== Output Cmm ====================
+[section ""cstring" . $trModule3_rWV_bytes" {
+     $trModule3_rWV_bytes:
+         I8[] [84,101,115,116]
+ }]
+
+
+
+==================== Output Cmm ====================
+[section ""data" . $trModule4_rWW_closure" {
+     $trModule4_rWW_closure:
+         const GHC.Types.TrNameS_con_info;
+         const $trModule3_rWV_bytes;
+ }]
+
+
+
+==================== Output Cmm ====================
+[section ""data" . Test.$trModule_closure" {
+     Test.$trModule_closure:
+         const GHC.Types.Module_con_info;
+         const $trModule2_rWU_closure+1;
+         const $trModule4_rWW_closure+1;
+         const 3;
+ }]
+
+
+
+==================== Output Cmm ====================
+[section ""relreadonly" . S17B_srt" { S17B_srt:
+ }]
+
+
