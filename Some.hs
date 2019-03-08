@@ -10,6 +10,9 @@ data InterMed k v = End
                   | Nxt (Maybe (k, v)) (InterMed k v)
                   deriving (Show, Eq)
 
+foldIM :: (Ord k) =>
+  ((t, a1 -> t -> t, a2 -> t -> t, t2 -> t -> t), (a1, k -> a1), (a2, v -> a2), (t2, (k, v) -> t2))
+  -> InterMed k v -> t
 foldIM phi@((e,v,k,n),(c1,f1),(c2,f2),(c3,f3)) m = case m of
   End -> e
   Val a x -> v (foldMk  phi a) (foldIM phi x)
@@ -28,9 +31,35 @@ foldMkv phi@((e,v,k,n),(c1,f1),(c2,f2),(c3,f3)) m = case m of
   Nothing -> c3
   Just a  -> f3 a
 
+data X k v a = E
+             | V (Maybe k) a
+             | K (Maybe v) a
+             | N (Maybe (k, v)) a
+             deriving (Show, Eq)
 
+unfoldIM psis@(psi, psi1, psi2, psi3) x = case psi x of
+  E       -> End
+  V mk  m -> Val (unfoldMk  psis mk)  (unfoldIM psis m)
+  K mv  m -> Key (unfoldMv  psis mv)  (unfoldIM psis m)
+  N mkv m -> Nxt (unfoldMkv psis mkv) (unfoldIM psis m)
+
+unfoldMk  psis@(psi, psi1, psi2, psi3) x = psi1 x
+unfoldMv  psis@(psi, psi1, psi2, psi3) x = psi2 x
+unfoldMkv psis@(psi, psi1, psi2, psi3) x = psi3 x
+
+psi :: ([Maybe k], [Maybe v]) -> X k v ([Maybe k], [Maybe v])
+psi ([],[])      = E
+psi (k:ks, [])   = V k (ks, [])
+psi ([], v:vs)   = K v ([], vs)
+psi (k:ks, v:vs) = N (liftA2 (,) k v) (ks, vs)
+
+{-
 some :: (Ord k) => ([Maybe k], [Maybe v]) -> Maybe (M.Map k v)
-some = undefined
+some = foldIM phi . unfoldIM psi
+  where
+    phi = undefined
+    psi = undefined
+-}
 
 {-
 pairWith f (Just x) (Just y) = Just (f x y)
