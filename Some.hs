@@ -10,23 +10,23 @@ data InterMed k v = BothEnd
                   | Next (Maybe (k, v)) (InterMed k v)
                   deriving (Show, Eq)
 
-phi :: (Ord k) => M.Map k v -> InterMed k v -> Maybe (M.Map k v)
-phi z BothEnd = Just z
-phi _ (ValEnd Nothing _)  = Nothing
-phi z (ValEnd (Just _) r) = phi z r
-phi _ (KeyEnd Nothing _)  = Nothing
-phi z (KeyEnd (Just _) r) = phi z r
-phi _ (Next Nothing _)    = Nothing
-phi z (Next (Just (k, v)) r) = phi (M.insert k v z) r
+cataPhi :: (Ord k) => M.Map k v -> InterMed k v -> Maybe (M.Map k v)
+cataPhi z BothEnd = Just z
+cataPhi _ (ValEnd Nothing _)  = Nothing
+cataPhi z (ValEnd (Just _) r) = cataPhi z r
+cataPhi _ (KeyEnd Nothing _)  = Nothing
+cataPhi z (KeyEnd (Just _) r) = cataPhi z r
+cataPhi _ (Next Nothing _)    = Nothing
+cataPhi z (Next (Just (k, v)) r) = cataPhi (M.insert k v z) r
 
-psi :: ([Maybe k], [Maybe v]) -> InterMed k v
-psi ([], []) = BothEnd
-psi (mk:mks, []) = ValEnd mk (psi (mks, []))
-psi ([], mv:mvs) = KeyEnd mv (psi ([], mvs))
-psi (mk:mks, mv:mvs) = Next (liftA2 (,) mk mv) (psi (mks, mvs))
+anaPsi :: ([Maybe k], [Maybe v]) -> InterMed k v
+anaPsi ([], []) = BothEnd
+anaPsi (mk:mks, []) = ValEnd mk (anaPsi (mks, []))
+anaPsi ([], mv:mvs) = KeyEnd mv (anaPsi ([], mvs))
+anaPsi (mk:mks, mv:mvs) = Next (liftA2 (,) mk mv) (anaPsi (mks, mvs))
 
 some :: (Ord k) => ([Maybe k], [Maybe v]) -> Maybe (M.Map k v)
-some = phi z . psi
+some = cataPhi z . anaPsi
   where z = M.empty
 
 {-
