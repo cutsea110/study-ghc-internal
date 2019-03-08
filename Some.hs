@@ -4,29 +4,33 @@ import Control.Applicative (liftA2)
 import Data.Map (Map)
 import qualified Data.Map as M
 
-data InterMed k v = BothEnd
-                  | ValEnd (Maybe k) (InterMed k v)
-                  | KeyEnd (Maybe v) (InterMed k v)
-                  | Next (Maybe (k, v)) (InterMed k v)
+data InterMed k v = End
+                  | Val (Maybe k) (InterMed k v)
+                  | Key (Maybe v) (InterMed k v)
+                  | Nxt (Maybe (k, v)) (InterMed k v)
                   deriving (Show, Eq)
 
-cataPhi :: (Ord k) => M.Map k v -> InterMed k v -> Maybe (M.Map k v)
-cataPhi z BothEnd = Just z
-cataPhi _ (ValEnd Nothing _)  = Nothing
-cataPhi z (ValEnd (Just _) r) = cataPhi z r
-cataPhi _ (KeyEnd Nothing _)  = Nothing
-cataPhi z (KeyEnd (Just _) r) = cataPhi z r
-cataPhi _ (Next Nothing _)    = Nothing
-cataPhi z (Next (Just (k, v)) r) = cataPhi (M.insert k v z) r
+foldIM phi@((e,v,k,n),(c1,f1),(c2,f2),(c3,f3)) m = case m of
+  End -> e
+  Val a x -> v (foldMk  phi a) (foldIM phi x)
+  Key a x -> k (foldMv  phi a) (foldIM phi x)
+  Nxt a x -> n (foldMkv phi a) (foldIM phi x)
 
-anaPsi :: ([Maybe k], [Maybe v]) -> InterMed k v
-anaPsi ([], []) = BothEnd
-anaPsi (mk:mks, []) = ValEnd mk (anaPsi (mks, []))
-anaPsi ([], mv:mvs) = KeyEnd mv (anaPsi ([], mvs))
-anaPsi (mk:mks, mv:mvs) = Next (liftA2 (,) mk mv) (anaPsi (mks, mvs))
+foldMk phi@((e,v,k,n),(c1,f1),(c2,f2),(c3,f3)) m = case m of
+  Nothing -> c1
+  Just a  -> f1 a
+
+foldMv phi@((e,v,k,n),(c1,f1),(c2,f2),(c3,f3)) m = case m of
+  Nothing -> c2
+  Just a  -> f2 a
+
+foldMkv phi@((e,v,k,n),(c1,f1),(c2,f2),(c3,f3)) m = case m of
+  Nothing -> c3
+  Just a  -> f3 a
+
 
 some :: (Ord k) => ([Maybe k], [Maybe v]) -> Maybe (M.Map k v)
-some = cataPhi M.empty . anaPsi
+some = undefined
 
 {-
 pairWith f (Just x) (Just y) = Just (f x y)
