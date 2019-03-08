@@ -26,8 +26,7 @@ anaPsi ([], mv:mvs) = KeyEnd mv (anaPsi ([], mvs))
 anaPsi (mk:mks, mv:mvs) = Next (liftA2 (,) mk mv) (anaPsi (mks, mvs))
 
 some :: (Ord k) => ([Maybe k], [Maybe v]) -> Maybe (M.Map k v)
-some = cataPhi z . anaPsi
-  where z = M.empty
+some = cataPhi M.empty . anaPsi
 
 {-
 pairWith f (Just x) (Just y) = Just (f x y)
