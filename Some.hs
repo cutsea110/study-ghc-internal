@@ -53,8 +53,11 @@ psi (k:ks, [])   = VE k (ks, [])
 psi ([], v:vs)   = KE v ([], vs)
 psi (k:ks, v:vs) = NT (liftA2 (,) k v) (ks, vs)
 
-psis = (psi, id, id, id)
-{-
+phi :: Ord k =>
+  ( Maybe (Map k a1)
+  , Maybe a2 -> Maybe a3 -> Maybe a3
+  , Maybe a4 -> Maybe a5 -> Maybe a5
+  , Maybe (k, a1) -> Maybe (M.Map k a1) -> Maybe (M.Map k a1))
 phi = (e, v, k, n)
   where
     e = Just M.empty
@@ -63,11 +66,14 @@ phi = (e, v, k, n)
     k Nothing _ = Nothing
     k (Just _) z = z
     n Nothing _ = Nothing
-    n (Just (k, v)) z = undefined -- Just (M.insert k v z)
--}
--- phis = (phi, id, id, id)
+    n (Just (k, v)) z = maybe Nothing (Just . M.insert k v) z
 
--- some = foldIM phis . unfoldIM psis
+some :: (Ord k) => ([Maybe k], [Maybe v]) -> Maybe (M.Map k v)
+some = foldIM phis . unfoldIM psis
+  where
+    psis = (psi, id, id, id)
+    phis = (phi, (Nothing, Just), (Nothing, Just), (Nothing, Just))
+    
 
 {-
 some :: (Ord k) => ([Maybe k], [Maybe v]) -> Maybe (M.Map k v)
